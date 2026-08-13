@@ -1,4 +1,6 @@
 {
+  description = "A flake providing a devShell for work with simple rust projects.";
+
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
 
