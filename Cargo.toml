@@ -1,6 +1,6 @@
 [package]
 name = "codepage-rs"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 license = "MIT"
 categories = ["encoding"]
@@ -8,6 +8,10 @@ keywords = ["codepage-437", "codepage", "encoding"]
 readme = "README.md"
 description = "A tiny crate for codepage-437 encoding."
 repository = "https://github.com/Homomorphism-of-H/codepage-rs/"
+
+[features]
+default = ["std"]
+std = []
 
 [lints.clippy]
 cargo = { level = "warn", priority = -1 }
@@ -26,3 +30,9 @@ panic_in_result_fn = "deny"
 panic = "deny"
 exit = "deny"
 as_conversions = "deny"
+doc_broken_link = "deny"
+doc_markdown = "deny"
+doc_link_code = "deny"
+doc_comment_double_space_linebreaks = "deny"
+empty_docs = "deny"
+doc_paragraphs_missing_punctuation = "deny"

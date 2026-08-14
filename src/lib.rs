@@ -1,8 +1,17 @@
+//! An extremely minimal implementation of Codepage 437 encoding.
+//!
+//! # Features
+//! - `default` : `std`
+//! - `std` : Link to rust's std library, without this `#[no_std]` is enabled.
+
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[cfg(feature = "std")]
 use std::fmt;
 
 /// The table of characters in Codepage 437.
 #[rustfmt::skip]
-pub const CP437CHARS: &[char] = &[
+pub const CP437CHARS: [char; 256] = [
     '\0', '☺',  '☻',  '♥',  '♦',  '♣',  '♠',  '•',  '◘',  '○',  '◙',  '♂',  '♀',  '♪',  '♫',  '☼',
     '►',  '◄',  '↕',  '‼',  '¶',  '§',  '▬',  '↨',  '↑',  '↓',  '→',  '←',  '∟',  '↔',  '▲',  '▼', 
     ' ',  '!',  '"',  '#',  '$',  '%',  '&',  '\'', '(',  ')',  '*',  '+',  ',',  '-',  '.',  '/',
@@ -23,17 +32,38 @@ pub const CP437CHARS: &[char] = &[
 
 #[repr(transparent)]
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+/// A Codepage 437 character.
+///
+/// Stored transparently in memory as a single [`u8`].
+///
+/// # Examples
+///
+/// A `CP437Char` can be initialized through either [`from_byte`](Self::from_byte) or [`from_byte`](Self::from_char).
+///
+/// ```
+/// use codepage_rs::CP437Char;
+///
+/// let byt = CP437Char::from_byte(3);
+/// let chr = CP437Char::from_char('♥').unwrap();
+///
+/// assert_eq!(byt, chr);
+/// ```
 pub struct CP437Char(u8);
 
 impl CP437Char {
+    /// The table of characters in Codepage 437.
+    pub const CHARS: [char; 256] = CP437CHARS;
+
     #[must_use]
     #[inline]
+    /// Constructs a [`CP437Char`] from a [`u8`].
     pub const fn from_byte(val: u8) -> Self {
         Self(val)
     }
 
     #[must_use]
     #[inline]
+    /// Converts a [`CP437Char`] to a [`u8`].
     pub const fn to_byte(self) -> u8 {
         self.0
     }
@@ -48,6 +78,7 @@ impl CP437Char {
         clippy::too_many_lines,
         reason = "It's just one massive match statement"
     )]
+    /// Attempts to construct a [`CP437Char`] from a [`char`].
     pub const fn from_char(char: char) -> Option<Self> {
         match char {
             '\0' => Some(Self(0)),
@@ -315,6 +346,7 @@ impl CP437Char {
         clippy::too_many_lines,
         reason = "It's just one massive match statement"
     )]
+    /// Converts a [`CP437Char`] to a [`char`].
     pub const fn to_char(self) -> char {
         match self {
             Self(0) => '\0',
@@ -591,17 +623,26 @@ impl TryFrom<char> for CP437Char {
     }
 }
 
+#[cfg(feature = "std")]
 impl fmt::Display for CP437Char {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.to_char())
     }
 }
 
+/// An extension trait for [`char`] and other types that behave similar to [`char`].
 pub trait CP437CharExt {
+    /// Checks if the character is in CP437.
     fn is_cp437(&self) -> bool;
 
+    /// Converts a character to a byte in CP437, if it would be valid.
+    ///
+    /// This should always return [`None`] if [`is_cp437`](`Self::is_cp437`) returns `false`.
     fn to_cp437_byte(self) -> Option<u8>;
 
+    /// Casts a character to a [`CP437Char`], if it would be valid.
+    ///
+    /// This should always return [`None`] if [`is_cp437`](`Self::is_cp437`) returns `false`.
     fn to_cp437(self) -> Option<CP437Char>;
 }
 
