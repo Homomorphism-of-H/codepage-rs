@@ -1,13 +1,22 @@
 //! An extremely minimal implementation of Codepage 437 encoding.
 //!
-//! # Features
+//! # Cargo Features
 //! - `default` : `std`
-//! - `std` : Link to rust's std library, without this `#[no_std]` is enabled.
+//! - `std` : Add rust's std library as a dependency, without this `#[no_std]` is enabled.
+//! - `bytemuck` : Adds derives for `Pod` and `Zeroable` to [`Char437`].
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
 #[cfg(feature = "std")]
 use std::fmt;
+
+#[cfg(not(feature = "std"))]
+use core::hash;
+#[cfg(feature = "std")]
+use std::hash;
+
+#[cfg(feature = "bytemuck")]
+use bytemuck::{Pod, Zeroable};
 
 /// The table of characters in Codepage 437.
 #[rustfmt::skip]
@@ -30,45 +39,47 @@ pub const CP437CHARS: [char; 256] = [
     '≡',  '±',  '≥',  '≤',  '⌠',  '⌡',  '÷',  '≈',  '°',  '∙',  '·',  '√',  'ⁿ',  '²',  '■',  '\u{a0}'
 ];
 
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[cfg_attr(feature = "bytemuck", derive(Zeroable, Pod))]
 #[repr(transparent)]
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 /// A Codepage 437 character.
 ///
 /// Stored transparently in memory as a single [`u8`].
 ///
 /// # Examples
 ///
-/// A `CP437Char` can be initialized through either [`from_byte`](Self::from_byte) or [`from_byte`](Self::from_char).
+/// A `Char437` can be initialized through either [`from_byte`](Self::from_byte) or [`from_byte`](Self::from_char).
 ///
 /// ```
-/// use codepage_rs::CP437Char;
+/// use codepage_rs::Char437;
 ///
-/// let byt = CP437Char::from_byte(3);
-/// let chr = CP437Char::from_char('♥').unwrap();
+/// let byt = Char437::from_byte(3);
+/// let chr = Char437::from_char('♥').unwrap();
 ///
 /// assert_eq!(byt, chr);
 /// ```
-pub struct CP437Char(u8);
+pub struct Char437(pub(crate) u8);
 
-impl CP437Char {
+impl Char437 {
     /// The table of characters in Codepage 437.
     pub const CHARS: [char; 256] = CP437CHARS;
 
     #[must_use]
     #[inline]
-    /// Constructs a [`CP437Char`] from a [`u8`].
+    /// Constructs a [`Char437`] from a [`u8`].
     pub const fn from_byte(val: u8) -> Self {
         Self(val)
     }
 
     #[must_use]
     #[inline]
-    /// Converts a [`CP437Char`] to a [`u8`].
+    /// Converts a [`Char437`] to a [`u8`].
     pub const fn to_byte(self) -> u8 {
         self.0
     }
 
     #[must_use]
+    /// Gives the location of the character on a 16 x 16 tile map.
     pub const fn location(self) -> (u8, u8) {
         (self.0 % 16, self.0 / (16))
     }
@@ -78,7 +89,7 @@ impl CP437Char {
         clippy::too_many_lines,
         reason = "It's just one massive match statement"
     )]
-    /// Attempts to construct a [`CP437Char`] from a [`char`].
+    /// Attempts to construct a [`Char437`] from a [`char`], failing if `char` isn't in CP437.
     pub const fn from_char(char: char) -> Option<Self> {
         match char {
             '\0' => Some(Self(0)),
@@ -346,7 +357,7 @@ impl CP437Char {
         clippy::too_many_lines,
         reason = "It's just one massive match statement"
     )]
-    /// Converts a [`CP437Char`] to a [`char`].
+    /// Converts a [`Char437`] to a [`char`].
     pub const fn to_char(self) -> char {
         match self {
             Self(0) => '\0',
@@ -609,13 +620,38 @@ impl CP437Char {
     }
 }
 
-impl From<CP437Char> for char {
-    fn from(value: CP437Char) -> Self {
+impl Default for Char437 {
+    /// Returns the equivalent of the char `\0`.
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl hash::Hash for Char437 {
+    fn hash<H: hash::Hasher>(&self, state: &mut H) {
+        state.write_u8(self.0);
+    }
+}
+
+impl From<Char437> for char {
+    fn from(value: Char437) -> Self {
         value.to_char()
     }
 }
 
-impl TryFrom<char> for CP437Char {
+impl From<Char437> for u8 {
+    fn from(value: Char437) -> Self {
+        value.0
+    }
+}
+
+impl From<u8> for Char437 {
+    fn from(value: u8) -> Self {
+        Self(value)
+    }
+}
+
+impl TryFrom<char> for Char437 {
     type Error = ();
 
     fn try_from(value: char) -> Result<Self, ()> {
@@ -624,14 +660,14 @@ impl TryFrom<char> for CP437Char {
 }
 
 #[cfg(feature = "std")]
-impl fmt::Display for CP437Char {
+impl fmt::Display for Char437 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.to_char())
     }
 }
 
 /// An extension trait for [`char`] and other types that behave similar to [`char`].
-pub trait CP437CharExt {
+pub trait Char437Ext {
     /// Checks if the character is in CP437.
     fn is_cp437(&self) -> bool;
 
@@ -640,37 +676,821 @@ pub trait CP437CharExt {
     /// This should always return [`None`] if [`is_cp437`](`Self::is_cp437`) returns `false`.
     fn to_cp437_byte(self) -> Option<u8>;
 
-    /// Casts a character to a [`CP437Char`], if it would be valid.
+    /// Casts a character to a [`Char437`], if it would be valid.
     ///
     /// This should always return [`None`] if [`is_cp437`](`Self::is_cp437`) returns `false`.
-    fn to_cp437(self) -> Option<CP437Char>;
+    fn to_cp437(self) -> Option<Char437>;
 }
 
-impl CP437CharExt for char {
+impl Char437Ext for char {
     fn is_cp437(&self) -> bool {
         CP437CHARS.contains(self)
     }
 
     fn to_cp437_byte(self) -> Option<u8> {
-        self.to_cp437().map(CP437Char::to_byte)
+        self.to_cp437().map(Char437::to_byte)
     }
 
-    fn to_cp437(self) -> Option<CP437Char> {
-        CP437Char::from_char(self)
+    fn to_cp437(self) -> Option<Char437> {
+        Char437::from_char(self)
     }
 }
 
 // I don't know who would want this, but I'll provide it regardless.
-impl CP437CharExt for CP437Char {
+impl Char437Ext for Char437 {
+    /// Always will return true for obvious reasons.
     fn is_cp437(&self) -> bool {
         true
     }
 
+    /// The same as a call to [`Char437::to_byte`] wrapped in [`Some`].
     fn to_cp437_byte(self) -> Option<u8> {
         Some(self.to_byte())
     }
 
-    fn to_cp437(self) -> Option<CP437Char> {
+    /// The same as wrapping `self` in [`Some`].
+    fn to_cp437(self) -> Option<Char437> {
         Some(self)
     }
+}
+
+/// Construct a [`Char437`] from a [`char`].
+///
+/// # Example
+///
+/// ```
+/// #[macro_use]
+/// use codepage_rs::cp437;
+/// let a = cp437!('a');
+/// ```
+#[macro_export]
+macro_rules! cp437 {
+    ('\0') => {
+        codepage_rs::Char437::from_byte(0)
+    };
+    ('☺') => {
+        codepage_rs::Char437::from_byte(1)
+    };
+    ('☻') => {
+        codepage_rs::Char437::from_byte(2)
+    };
+    ('♥') => {
+        codepage_rs::Char437::from_byte(3)
+    };
+    ('♦') => {
+        codepage_rs::Char437::from_byte(4)
+    };
+    ('♣') => {
+        codepage_rs::Char437::from_byte(5)
+    };
+    ('♠') => {
+        codepage_rs::Char437::from_byte(6)
+    };
+    ('•') => {
+        codepage_rs::Char437::from_byte(7)
+    };
+    ('◘') => {
+        codepage_rs::Char437::from_byte(8)
+    };
+    ('○') => {
+        codepage_rs::Char437::from_byte(9)
+    };
+    ('◙') => {
+        codepage_rs::Char437::from_byte(10)
+    };
+    ('♂') => {
+        codepage_rs::Char437::from_byte(11)
+    };
+    ('♀') => {
+        codepage_rs::Char437::from_byte(12)
+    };
+    ('♪') => {
+        codepage_rs::Char437::from_byte(13)
+    };
+    ('♫') => {
+        codepage_rs::Char437::from_byte(14)
+    };
+    ('☼') => {
+        codepage_rs::Char437::from_byte(15)
+    };
+    ('►') => {
+        codepage_rs::Char437::from_byte(16)
+    };
+    ('◄') => {
+        codepage_rs::Char437::from_byte(17)
+    };
+    ('↕') => {
+        codepage_rs::Char437::from_byte(18)
+    };
+    ('‼') => {
+        codepage_rs::Char437::from_byte(19)
+    };
+    ('¶') => {
+        codepage_rs::Char437::from_byte(20)
+    };
+    ('§') => {
+        codepage_rs::Char437::from_byte(21)
+    };
+    ('▬') => {
+        codepage_rs::Char437::from_byte(22)
+    };
+    ('↨') => {
+        codepage_rs::Char437::from_byte(23)
+    };
+    ('↑') => {
+        codepage_rs::Char437::from_byte(24)
+    };
+    ('↓') => {
+        codepage_rs::Char437::from_byte(25)
+    };
+    ('→') => {
+        codepage_rs::Char437::from_byte(26)
+    };
+    ('←') => {
+        codepage_rs::Char437::from_byte(27)
+    };
+    ('∟') => {
+        codepage_rs::Char437::from_byte(28)
+    };
+    ('↔') => {
+        codepage_rs::Char437::from_byte(29)
+    };
+    ('▲') => {
+        codepage_rs::Char437::from_byte(30)
+    };
+    ('▼') => {
+        codepage_rs::Char437::from_byte(31)
+    };
+    (' ') => {
+        codepage_rs::Char437::from_byte(32)
+    };
+    ('!') => {
+        codepage_rs::Char437::from_byte(33)
+    };
+    ('"') => {
+        codepage_rs::Char437::from_byte(34)
+    };
+    ('#') => {
+        codepage_rs::Char437::from_byte(35)
+    };
+    ('$') => {
+        codepage_rs::Char437::from_byte(36)
+    };
+    ('%') => {
+        codepage_rs::Char437::from_byte(37)
+    };
+    ('&') => {
+        codepage_rs::Char437::from_byte(38)
+    };
+    ('\'') => {
+        codepage_rs::Char437::from_byte(39)
+    };
+    ('(') => {
+        codepage_rs::Char437::from_byte(40)
+    };
+    (')') => {
+        codepage_rs::Char437::from_byte(41)
+    };
+    ('*') => {
+        codepage_rs::Char437::from_byte(42)
+    };
+    ('+') => {
+        codepage_rs::Char437::from_byte(43)
+    };
+    (',') => {
+        codepage_rs::Char437::from_byte(44)
+    };
+    ('-') => {
+        codepage_rs::Char437::from_byte(45)
+    };
+    ('.') => {
+        codepage_rs::Char437::from_byte(46)
+    };
+    ('/') => {
+        codepage_rs::Char437::from_byte(47)
+    };
+    ('0') => {
+        codepage_rs::Char437::from_byte(48)
+    };
+    ('1') => {
+        codepage_rs::Char437::from_byte(49)
+    };
+    ('2') => {
+        codepage_rs::Char437::from_byte(50)
+    };
+    ('3') => {
+        codepage_rs::Char437::from_byte(51)
+    };
+    ('4') => {
+        codepage_rs::Char437::from_byte(52)
+    };
+    ('5') => {
+        codepage_rs::Char437::from_byte(53)
+    };
+    ('6') => {
+        codepage_rs::Char437::from_byte(54)
+    };
+    ('7') => {
+        codepage_rs::Char437::from_byte(55)
+    };
+    ('8') => {
+        codepage_rs::Char437::from_byte(56)
+    };
+    ('9') => {
+        codepage_rs::Char437::from_byte(57)
+    };
+    (':') => {
+        codepage_rs::Char437::from_byte(58)
+    };
+    (';') => {
+        codepage_rs::Char437::from_byte(59)
+    };
+    ('<') => {
+        codepage_rs::Char437::from_byte(60)
+    };
+    ('=') => {
+        codepage_rs::Char437::from_byte(61)
+    };
+    ('>') => {
+        codepage_rs::Char437::from_byte(62)
+    };
+    ('?') => {
+        codepage_rs::Char437::from_byte(63)
+    };
+    ('@') => {
+        codepage_rs::Char437::from_byte(64)
+    };
+    ('A') => {
+        codepage_rs::Char437::from_byte(65)
+    };
+    ('B') => {
+        codepage_rs::Char437::from_byte(66)
+    };
+    ('C') => {
+        codepage_rs::Char437::from_byte(67)
+    };
+    ('D') => {
+        codepage_rs::Char437::from_byte(68)
+    };
+    ('E') => {
+        codepage_rs::Char437::from_byte(69)
+    };
+    ('F') => {
+        codepage_rs::Char437::from_byte(70)
+    };
+    ('G') => {
+        codepage_rs::Char437::from_byte(71)
+    };
+    ('H') => {
+        codepage_rs::Char437::from_byte(72)
+    };
+    ('I') => {
+        codepage_rs::Char437::from_byte(73)
+    };
+    ('J') => {
+        codepage_rs::Char437::from_byte(74)
+    };
+    ('K') => {
+        codepage_rs::Char437::from_byte(75)
+    };
+    ('L') => {
+        codepage_rs::Char437::from_byte(76)
+    };
+    ('M') => {
+        codepage_rs::Char437::from_byte(77)
+    };
+    ('N') => {
+        codepage_rs::Char437::from_byte(78)
+    };
+    ('O') => {
+        codepage_rs::Char437::from_byte(79)
+    };
+    ('P') => {
+        codepage_rs::Char437::from_byte(80)
+    };
+    ('Q') => {
+        codepage_rs::Char437::from_byte(81)
+    };
+    ('R') => {
+        codepage_rs::Char437::from_byte(82)
+    };
+    ('S') => {
+        codepage_rs::Char437::from_byte(83)
+    };
+    ('T') => {
+        codepage_rs::Char437::from_byte(84)
+    };
+    ('U') => {
+        codepage_rs::Char437::from_byte(85)
+    };
+    ('V') => {
+        codepage_rs::Char437::from_byte(86)
+    };
+    ('W') => {
+        codepage_rs::Char437::from_byte(87)
+    };
+    ('X') => {
+        codepage_rs::Char437::from_byte(88)
+    };
+    ('Y') => {
+        codepage_rs::Char437::from_byte(89)
+    };
+    ('Z') => {
+        codepage_rs::Char437::from_byte(90)
+    };
+    ('[') => {
+        codepage_rs::Char437::from_byte(91)
+    };
+    ('\\') => {
+        codepage_rs::Char437::from_byte(92)
+    };
+    (']') => {
+        codepage_rs::Char437::from_byte(93)
+    };
+    ('^') => {
+        codepage_rs::Char437::from_byte(94)
+    };
+    ('_') => {
+        codepage_rs::Char437::from_byte(95)
+    };
+    ('`') => {
+        codepage_rs::Char437::from_byte(96)
+    };
+    ('a') => {
+        codepage_rs::Char437::from_byte(97)
+    };
+    ('b') => {
+        codepage_rs::Char437::from_byte(98)
+    };
+    ('c') => {
+        codepage_rs::Char437::from_byte(99)
+    };
+    ('d') => {
+        codepage_rs::Char437::from_byte(100)
+    };
+    ('e') => {
+        codepage_rs::Char437::from_byte(101)
+    };
+    ('f') => {
+        codepage_rs::Char437::from_byte(102)
+    };
+    ('g') => {
+        codepage_rs::Char437::from_byte(103)
+    };
+    ('h') => {
+        codepage_rs::Char437::from_byte(104)
+    };
+    ('i') => {
+        codepage_rs::Char437::from_byte(105)
+    };
+    ('j') => {
+        codepage_rs::Char437::from_byte(106)
+    };
+    ('k') => {
+        codepage_rs::Char437::from_byte(107)
+    };
+    ('l') => {
+        codepage_rs::Char437::from_byte(108)
+    };
+    ('m') => {
+        codepage_rs::Char437::from_byte(109)
+    };
+    ('n') => {
+        codepage_rs::Char437::from_byte(110)
+    };
+    ('o') => {
+        codepage_rs::Char437::from_byte(111)
+    };
+    ('p') => {
+        codepage_rs::Char437::from_byte(112)
+    };
+    ('q') => {
+        codepage_rs::Char437::from_byte(113)
+    };
+    ('r') => {
+        codepage_rs::Char437::from_byte(114)
+    };
+    ('s') => {
+        codepage_rs::Char437::from_byte(115)
+    };
+    ('t') => {
+        codepage_rs::Char437::from_byte(116)
+    };
+    ('u') => {
+        codepage_rs::Char437::from_byte(117)
+    };
+    ('v') => {
+        codepage_rs::Char437::from_byte(118)
+    };
+    ('w') => {
+        codepage_rs::Char437::from_byte(119)
+    };
+    ('x') => {
+        codepage_rs::Char437::from_byte(120)
+    };
+    ('y') => {
+        codepage_rs::Char437::from_byte(121)
+    };
+    ('z') => {
+        codepage_rs::Char437::from_byte(122)
+    };
+    ('{') => {
+        codepage_rs::Char437::from_byte(123)
+    };
+    ('|') => {
+        codepage_rs::Char437::from_byte(124)
+    };
+    ('}') => {
+        codepage_rs::Char437::from_byte(125)
+    };
+    ('~') => {
+        codepage_rs::Char437::from_byte(126)
+    };
+    ('⌂') => {
+        codepage_rs::Char437::from_byte(127)
+    };
+    ('Ç') => {
+        codepage_rs::Char437::from_byte(128)
+    };
+    ('ü') => {
+        codepage_rs::Char437::from_byte(129)
+    };
+    ('é') => {
+        codepage_rs::Char437::from_byte(130)
+    };
+    ('â') => {
+        codepage_rs::Char437::from_byte(131)
+    };
+    ('ä') => {
+        codepage_rs::Char437::from_byte(132)
+    };
+    ('à') => {
+        codepage_rs::Char437::from_byte(133)
+    };
+    ('å') => {
+        codepage_rs::Char437::from_byte(134)
+    };
+    ('ç') => {
+        codepage_rs::Char437::from_byte(135)
+    };
+    ('ê') => {
+        codepage_rs::Char437::from_byte(136)
+    };
+    ('ë') => {
+        codepage_rs::Char437::from_byte(137)
+    };
+    ('è') => {
+        codepage_rs::Char437::from_byte(138)
+    };
+    ('ï') => {
+        codepage_rs::Char437::from_byte(139)
+    };
+    ('î') => {
+        codepage_rs::Char437::from_byte(140)
+    };
+    ('ì') => {
+        codepage_rs::Char437::from_byte(141)
+    };
+    ('Ä') => {
+        codepage_rs::Char437::from_byte(142)
+    };
+    ('Å') => {
+        codepage_rs::Char437::from_byte(143)
+    };
+    ('É') => {
+        codepage_rs::Char437::from_byte(144)
+    };
+    ('æ') => {
+        codepage_rs::Char437::from_byte(145)
+    };
+    ('Æ') => {
+        codepage_rs::Char437::from_byte(146)
+    };
+    ('ô') => {
+        codepage_rs::Char437::from_byte(147)
+    };
+    ('ö') => {
+        codepage_rs::Char437::from_byte(148)
+    };
+    ('ò') => {
+        codepage_rs::Char437::from_byte(149)
+    };
+    ('û') => {
+        codepage_rs::Char437::from_byte(150)
+    };
+    ('ù') => {
+        codepage_rs::Char437::from_byte(151)
+    };
+    ('ÿ') => {
+        codepage_rs::Char437::from_byte(152)
+    };
+    ('Ö') => {
+        codepage_rs::Char437::from_byte(153)
+    };
+    ('Ü') => {
+        codepage_rs::Char437::from_byte(154)
+    };
+    ('¢') => {
+        codepage_rs::Char437::from_byte(155)
+    };
+    ('£') => {
+        codepage_rs::Char437::from_byte(156)
+    };
+    ('¥') => {
+        codepage_rs::Char437::from_byte(157)
+    };
+    ('₧') => {
+        codepage_rs::Char437::from_byte(158)
+    };
+    ('ƒ') => {
+        codepage_rs::Char437::from_byte(159)
+    };
+    ('á') => {
+        codepage_rs::Char437::from_byte(160)
+    };
+    ('í') => {
+        codepage_rs::Char437::from_byte(161)
+    };
+    ('ó') => {
+        codepage_rs::Char437::from_byte(162)
+    };
+    ('ú') => {
+        codepage_rs::Char437::from_byte(163)
+    };
+    ('ñ') => {
+        codepage_rs::Char437::from_byte(164)
+    };
+    ('Ñ') => {
+        codepage_rs::Char437::from_byte(165)
+    };
+    ('ª') => {
+        codepage_rs::Char437::from_byte(166)
+    };
+    ('º') => {
+        codepage_rs::Char437::from_byte(167)
+    };
+    ('¿') => {
+        codepage_rs::Char437::from_byte(168)
+    };
+    ('⌐') => {
+        codepage_rs::Char437::from_byte(169)
+    };
+    ('¬') => {
+        codepage_rs::Char437::from_byte(170)
+    };
+    ('½') => {
+        codepage_rs::Char437::from_byte(171)
+    };
+    ('¼') => {
+        codepage_rs::Char437::from_byte(172)
+    };
+    ('¡') => {
+        codepage_rs::Char437::from_byte(173)
+    };
+    ('«') => {
+        codepage_rs::Char437::from_byte(174)
+    };
+    ('»') => {
+        codepage_rs::Char437::from_byte(175)
+    };
+    ('░') => {
+        codepage_rs::Char437::from_byte(176)
+    };
+    ('▒') => {
+        codepage_rs::Char437::from_byte(177)
+    };
+    ('▓') => {
+        codepage_rs::Char437::from_byte(178)
+    };
+    ('│') => {
+        codepage_rs::Char437::from_byte(179)
+    };
+    ('┤') => {
+        codepage_rs::Char437::from_byte(180)
+    };
+    ('╡') => {
+        codepage_rs::Char437::from_byte(181)
+    };
+    ('╢') => {
+        codepage_rs::Char437::from_byte(182)
+    };
+    ('╖') => {
+        codepage_rs::Char437::from_byte(183)
+    };
+    ('╕') => {
+        codepage_rs::Char437::from_byte(184)
+    };
+    ('╣') => {
+        codepage_rs::Char437::from_byte(185)
+    };
+    ('║') => {
+        codepage_rs::Char437::from_byte(186)
+    };
+    ('╗') => {
+        codepage_rs::Char437::from_byte(187)
+    };
+    ('╝') => {
+        codepage_rs::Char437::from_byte(188)
+    };
+    ('╜') => {
+        codepage_rs::Char437::from_byte(189)
+    };
+    ('╛') => {
+        codepage_rs::Char437::from_byte(190)
+    };
+    ('┐') => {
+        codepage_rs::Char437::from_byte(191)
+    };
+    ('└') => {
+        codepage_rs::Char437::from_byte(192)
+    };
+    ('┴') => {
+        codepage_rs::Char437::from_byte(193)
+    };
+    ('┬') => {
+        codepage_rs::Char437::from_byte(194)
+    };
+    ('├') => {
+        codepage_rs::Char437::from_byte(195)
+    };
+    ('─') => {
+        codepage_rs::Char437::from_byte(196)
+    };
+    ('┼') => {
+        codepage_rs::Char437::from_byte(197)
+    };
+    ('╞') => {
+        codepage_rs::Char437::from_byte(198)
+    };
+    ('╟') => {
+        codepage_rs::Char437::from_byte(199)
+    };
+    ('╚') => {
+        codepage_rs::Char437::from_byte(200)
+    };
+    ('╔') => {
+        codepage_rs::Char437::from_byte(201)
+    };
+    ('╩') => {
+        codepage_rs::Char437::from_byte(202)
+    };
+    ('╦') => {
+        codepage_rs::Char437::from_byte(203)
+    };
+    ('╠') => {
+        codepage_rs::Char437::from_byte(204)
+    };
+    ('═') => {
+        codepage_rs::Char437::from_byte(205)
+    };
+    ('╬') => {
+        codepage_rs::Char437::from_byte(206)
+    };
+    ('╧') => {
+        codepage_rs::Char437::from_byte(207)
+    };
+    ('╨') => {
+        codepage_rs::Char437::from_byte(208)
+    };
+    ('╤') => {
+        codepage_rs::Char437::from_byte(209)
+    };
+    ('╥') => {
+        codepage_rs::Char437::from_byte(210)
+    };
+    ('╙') => {
+        codepage_rs::Char437::from_byte(211)
+    };
+    ('╘') => {
+        codepage_rs::Char437::from_byte(212)
+    };
+    ('╒') => {
+        codepage_rs::Char437::from_byte(213)
+    };
+    ('╓') => {
+        codepage_rs::Char437::from_byte(214)
+    };
+    ('╫') => {
+        codepage_rs::Char437::from_byte(215)
+    };
+    ('╪') => {
+        codepage_rs::Char437::from_byte(216)
+    };
+    ('┘') => {
+        codepage_rs::Char437::from_byte(217)
+    };
+    ('┌') => {
+        codepage_rs::Char437::from_byte(218)
+    };
+    ('█') => {
+        codepage_rs::Char437::from_byte(219)
+    };
+    ('▄') => {
+        codepage_rs::Char437::from_byte(220)
+    };
+    ('▌') => {
+        codepage_rs::Char437::from_byte(221)
+    };
+    ('▐') => {
+        codepage_rs::Char437::from_byte(222)
+    };
+    ('▀') => {
+        codepage_rs::Char437::from_byte(223)
+    };
+    ('α') => {
+        codepage_rs::Char437::from_byte(224)
+    };
+    ('ß') => {
+        codepage_rs::Char437::from_byte(225)
+    };
+    ('Γ') => {
+        codepage_rs::Char437::from_byte(226)
+    };
+    ('π') => {
+        codepage_rs::Char437::from_byte(227)
+    };
+    ('Σ') => {
+        codepage_rs::Char437::from_byte(228)
+    };
+    ('σ') => {
+        codepage_rs::Char437::from_byte(229)
+    };
+    ('µ') => {
+        codepage_rs::Char437::from_byte(230)
+    };
+    ('τ') => {
+        codepage_rs::Char437::from_byte(231)
+    };
+    ('Φ') => {
+        codepage_rs::Char437::from_byte(232)
+    };
+    ('Θ') => {
+        codepage_rs::Char437::from_byte(233)
+    };
+    ('Ω') => {
+        codepage_rs::Char437::from_byte(234)
+    };
+    ('δ') => {
+        codepage_rs::Char437::from_byte(235)
+    };
+    ('∞') => {
+        codepage_rs::Char437::from_byte(236)
+    };
+    ('φ') => {
+        codepage_rs::Char437::from_byte(237)
+    };
+    ('ε') => {
+        codepage_rs::Char437::from_byte(238)
+    };
+    ('∩') => {
+        codepage_rs::Char437::from_byte(239)
+    };
+    ('≡') => {
+        codepage_rs::Char437::from_byte(240)
+    };
+    ('±') => {
+        codepage_rs::Char437::from_byte(241)
+    };
+    ('≥') => {
+        codepage_rs::Char437::from_byte(242)
+    };
+    ('≤') => {
+        codepage_rs::Char437::from_byte(243)
+    };
+    ('⌠') => {
+        codepage_rs::Char437::from_byte(244)
+    };
+    ('⌡') => {
+        codepage_rs::Char437::from_byte(245)
+    };
+    ('÷') => {
+        codepage_rs::Char437::from_byte(246)
+    };
+    ('≈') => {
+        codepage_rs::Char437::from_byte(247)
+    };
+    ('°') => {
+        codepage_rs::Char437::from_byte(248)
+    };
+    ('∙') => {
+        codepage_rs::Char437::from_byte(249)
+    };
+    ('·') => {
+        codepage_rs::Char437::from_byte(250)
+    };
+    ('√') => {
+        codepage_rs::Char437::from_byte(251)
+    };
+    ('ⁿ') => {
+        codepage_rs::Char437::from_byte(252)
+    };
+    ('²') => {
+        codepage_rs::Char437::from_byte(253)
+    };
+    ('■') => {
+        codepage_rs::Char437::from_byte(254)
+    };
+    ('\u{a0}') => {
+        codepage_rs::Char437::from_byte(255)
+    };
 }

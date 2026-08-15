@@ -1,6 +1,6 @@
 [package]
 name = "codepage-rs"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2024"
 license = "MIT"
 categories = ["encoding"]
@@ -11,7 +11,13 @@ repository = "https://github.com/Homomorphism-of-H/codepage-rs/"
 
 [features]
 default = ["std"]
+# Disables #![no_std] and adds a few std traits
 std = []
+# Adds some bytemuck traits
+bytemuck = ["dep:bytemuck"]
+
+[dependencies]
+bytemuck = { version = "1.25.2", features = ["derive"], optional = true }
 
 [lints.clippy]
 cargo = { level = "warn", priority = -1 }

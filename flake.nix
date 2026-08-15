@@ -39,7 +39,9 @@
             pkg-config
             rustPlatform.bindgenHook
           ];
-          devDeps = [ ];
+          devDeps = with pkgs; [
+            just
+          ];
         in
         {
           default = pkgs.mkShell {
