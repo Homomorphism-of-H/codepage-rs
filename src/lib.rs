@@ -58,7 +58,7 @@ pub const CP437CHARS: [char; 256] = [
 ///
 /// assert_eq!(byt, chr);
 /// ```
-pub struct Char437(pub(crate) u8);
+pub struct Char437(pub u8);
 
 impl Char437 {
     /// The table of characters in Codepage 437.
@@ -726,771 +726,771 @@ impl Char437Ext for Char437 {
 #[macro_export]
 macro_rules! cp437 {
     ('\0') => {
-        codepage_rs::Char437::from_byte(0)
+        codepage_rs::Char437(0)
     };
     ('☺') => {
-        codepage_rs::Char437::from_byte(1)
+        codepage_rs::Char437(1)
     };
     ('☻') => {
-        codepage_rs::Char437::from_byte(2)
+        codepage_rs::Char437(2)
     };
     ('♥') => {
-        codepage_rs::Char437::from_byte(3)
+        codepage_rs::Char437(3)
     };
     ('♦') => {
-        codepage_rs::Char437::from_byte(4)
+        codepage_rs::Char437(4)
     };
     ('♣') => {
-        codepage_rs::Char437::from_byte(5)
+        codepage_rs::Char437(5)
     };
     ('♠') => {
-        codepage_rs::Char437::from_byte(6)
+        codepage_rs::Char437(6)
     };
     ('•') => {
-        codepage_rs::Char437::from_byte(7)
+        codepage_rs::Char437(7)
     };
     ('◘') => {
-        codepage_rs::Char437::from_byte(8)
+        codepage_rs::Char437(8)
     };
     ('○') => {
-        codepage_rs::Char437::from_byte(9)
+        codepage_rs::Char437(9)
     };
     ('◙') => {
-        codepage_rs::Char437::from_byte(10)
+        codepage_rs::Char437(10)
     };
     ('♂') => {
-        codepage_rs::Char437::from_byte(11)
+        codepage_rs::Char437(11)
     };
     ('♀') => {
-        codepage_rs::Char437::from_byte(12)
+        codepage_rs::Char437(12)
     };
     ('♪') => {
-        codepage_rs::Char437::from_byte(13)
+        codepage_rs::Char437(13)
     };
     ('♫') => {
-        codepage_rs::Char437::from_byte(14)
+        codepage_rs::Char437(14)
     };
     ('☼') => {
-        codepage_rs::Char437::from_byte(15)
+        codepage_rs::Char437(15)
     };
     ('►') => {
-        codepage_rs::Char437::from_byte(16)
+        codepage_rs::Char437(16)
     };
     ('◄') => {
-        codepage_rs::Char437::from_byte(17)
+        codepage_rs::Char437(17)
     };
     ('↕') => {
-        codepage_rs::Char437::from_byte(18)
+        codepage_rs::Char437(18)
     };
     ('‼') => {
-        codepage_rs::Char437::from_byte(19)
+        codepage_rs::Char437(19)
     };
     ('¶') => {
-        codepage_rs::Char437::from_byte(20)
+        codepage_rs::Char437(20)
     };
     ('§') => {
-        codepage_rs::Char437::from_byte(21)
+        codepage_rs::Char437(21)
     };
     ('▬') => {
-        codepage_rs::Char437::from_byte(22)
+        codepage_rs::Char437(22)
     };
     ('↨') => {
-        codepage_rs::Char437::from_byte(23)
+        codepage_rs::Char437(23)
     };
     ('↑') => {
-        codepage_rs::Char437::from_byte(24)
+        codepage_rs::Char437(24)
     };
     ('↓') => {
-        codepage_rs::Char437::from_byte(25)
+        codepage_rs::Char437(25)
     };
     ('→') => {
-        codepage_rs::Char437::from_byte(26)
+        codepage_rs::Char437(26)
     };
     ('←') => {
-        codepage_rs::Char437::from_byte(27)
+        codepage_rs::Char437(27)
     };
     ('∟') => {
-        codepage_rs::Char437::from_byte(28)
+        codepage_rs::Char437(28)
     };
     ('↔') => {
-        codepage_rs::Char437::from_byte(29)
+        codepage_rs::Char437(29)
     };
     ('▲') => {
-        codepage_rs::Char437::from_byte(30)
+        codepage_rs::Char437(30)
     };
     ('▼') => {
-        codepage_rs::Char437::from_byte(31)
+        codepage_rs::Char437(31)
     };
     (' ') => {
-        codepage_rs::Char437::from_byte(32)
+        codepage_rs::Char437(32)
     };
     ('!') => {
-        codepage_rs::Char437::from_byte(33)
+        codepage_rs::Char437(33)
     };
     ('"') => {
-        codepage_rs::Char437::from_byte(34)
+        codepage_rs::Char437(34)
     };
     ('#') => {
-        codepage_rs::Char437::from_byte(35)
+        codepage_rs::Char437(35)
     };
     ('$') => {
-        codepage_rs::Char437::from_byte(36)
+        codepage_rs::Char437(36)
     };
     ('%') => {
-        codepage_rs::Char437::from_byte(37)
+        codepage_rs::Char437(37)
     };
     ('&') => {
-        codepage_rs::Char437::from_byte(38)
+        codepage_rs::Char437(38)
     };
     ('\'') => {
-        codepage_rs::Char437::from_byte(39)
+        codepage_rs::Char437(39)
     };
     ('(') => {
-        codepage_rs::Char437::from_byte(40)
+        codepage_rs::Char437(40)
     };
     (')') => {
-        codepage_rs::Char437::from_byte(41)
+        codepage_rs::Char437(41)
     };
     ('*') => {
-        codepage_rs::Char437::from_byte(42)
+        codepage_rs::Char437(42)
     };
     ('+') => {
-        codepage_rs::Char437::from_byte(43)
+        codepage_rs::Char437(43)
     };
     (',') => {
-        codepage_rs::Char437::from_byte(44)
+        codepage_rs::Char437(44)
     };
     ('-') => {
-        codepage_rs::Char437::from_byte(45)
+        codepage_rs::Char437(45)
     };
     ('.') => {
-        codepage_rs::Char437::from_byte(46)
+        codepage_rs::Char437(46)
     };
     ('/') => {
-        codepage_rs::Char437::from_byte(47)
+        codepage_rs::Char437(47)
     };
     ('0') => {
-        codepage_rs::Char437::from_byte(48)
+        codepage_rs::Char437(48)
     };
     ('1') => {
-        codepage_rs::Char437::from_byte(49)
+        codepage_rs::Char437(49)
     };
     ('2') => {
-        codepage_rs::Char437::from_byte(50)
+        codepage_rs::Char437(50)
     };
     ('3') => {
-        codepage_rs::Char437::from_byte(51)
+        codepage_rs::Char437(51)
     };
     ('4') => {
-        codepage_rs::Char437::from_byte(52)
+        codepage_rs::Char437(52)
     };
     ('5') => {
-        codepage_rs::Char437::from_byte(53)
+        codepage_rs::Char437(53)
     };
     ('6') => {
-        codepage_rs::Char437::from_byte(54)
+        codepage_rs::Char437(54)
     };
     ('7') => {
-        codepage_rs::Char437::from_byte(55)
+        codepage_rs::Char437(55)
     };
     ('8') => {
-        codepage_rs::Char437::from_byte(56)
+        codepage_rs::Char437(56)
     };
     ('9') => {
-        codepage_rs::Char437::from_byte(57)
+        codepage_rs::Char437(57)
     };
     (':') => {
-        codepage_rs::Char437::from_byte(58)
+        codepage_rs::Char437(58)
     };
     (';') => {
-        codepage_rs::Char437::from_byte(59)
+        codepage_rs::Char437(59)
     };
     ('<') => {
-        codepage_rs::Char437::from_byte(60)
+        codepage_rs::Char437(60)
     };
     ('=') => {
-        codepage_rs::Char437::from_byte(61)
+        codepage_rs::Char437(61)
     };
     ('>') => {
-        codepage_rs::Char437::from_byte(62)
+        codepage_rs::Char437(62)
     };
     ('?') => {
-        codepage_rs::Char437::from_byte(63)
+        codepage_rs::Char437(63)
     };
     ('@') => {
-        codepage_rs::Char437::from_byte(64)
+        codepage_rs::Char437(64)
     };
     ('A') => {
-        codepage_rs::Char437::from_byte(65)
+        codepage_rs::Char437(65)
     };
     ('B') => {
-        codepage_rs::Char437::from_byte(66)
+        codepage_rs::Char437(66)
     };
     ('C') => {
-        codepage_rs::Char437::from_byte(67)
+        codepage_rs::Char437(67)
     };
     ('D') => {
-        codepage_rs::Char437::from_byte(68)
+        codepage_rs::Char437(68)
     };
     ('E') => {
-        codepage_rs::Char437::from_byte(69)
+        codepage_rs::Char437(69)
     };
     ('F') => {
-        codepage_rs::Char437::from_byte(70)
+        codepage_rs::Char437(70)
     };
     ('G') => {
-        codepage_rs::Char437::from_byte(71)
+        codepage_rs::Char437(71)
     };
     ('H') => {
-        codepage_rs::Char437::from_byte(72)
+        codepage_rs::Char437(72)
     };
     ('I') => {
-        codepage_rs::Char437::from_byte(73)
+        codepage_rs::Char437(73)
     };
     ('J') => {
-        codepage_rs::Char437::from_byte(74)
+        codepage_rs::Char437(74)
     };
     ('K') => {
-        codepage_rs::Char437::from_byte(75)
+        codepage_rs::Char437(75)
     };
     ('L') => {
-        codepage_rs::Char437::from_byte(76)
+        codepage_rs::Char437(76)
     };
     ('M') => {
-        codepage_rs::Char437::from_byte(77)
+        codepage_rs::Char437(77)
     };
     ('N') => {
-        codepage_rs::Char437::from_byte(78)
+        codepage_rs::Char437(78)
     };
     ('O') => {
-        codepage_rs::Char437::from_byte(79)
+        codepage_rs::Char437(79)
     };
     ('P') => {
-        codepage_rs::Char437::from_byte(80)
+        codepage_rs::Char437(80)
     };
     ('Q') => {
-        codepage_rs::Char437::from_byte(81)
+        codepage_rs::Char437(81)
     };
     ('R') => {
-        codepage_rs::Char437::from_byte(82)
+        codepage_rs::Char437(82)
     };
     ('S') => {
-        codepage_rs::Char437::from_byte(83)
+        codepage_rs::Char437(83)
     };
     ('T') => {
-        codepage_rs::Char437::from_byte(84)
+        codepage_rs::Char437(84)
     };
     ('U') => {
-        codepage_rs::Char437::from_byte(85)
+        codepage_rs::Char437(85)
     };
     ('V') => {
-        codepage_rs::Char437::from_byte(86)
+        codepage_rs::Char437(86)
     };
     ('W') => {
-        codepage_rs::Char437::from_byte(87)
+        codepage_rs::Char437(87)
     };
     ('X') => {
-        codepage_rs::Char437::from_byte(88)
+        codepage_rs::Char437(88)
     };
     ('Y') => {
-        codepage_rs::Char437::from_byte(89)
+        codepage_rs::Char437(89)
     };
     ('Z') => {
-        codepage_rs::Char437::from_byte(90)
+        codepage_rs::Char437(90)
     };
     ('[') => {
-        codepage_rs::Char437::from_byte(91)
+        codepage_rs::Char437(91)
     };
     ('\\') => {
-        codepage_rs::Char437::from_byte(92)
+        codepage_rs::Char437(92)
     };
     (']') => {
-        codepage_rs::Char437::from_byte(93)
+        codepage_rs::Char437(93)
     };
     ('^') => {
-        codepage_rs::Char437::from_byte(94)
+        codepage_rs::Char437(94)
     };
     ('_') => {
-        codepage_rs::Char437::from_byte(95)
+        codepage_rs::Char437(95)
     };
     ('`') => {
-        codepage_rs::Char437::from_byte(96)
+        codepage_rs::Char437(96)
     };
     ('a') => {
-        codepage_rs::Char437::from_byte(97)
+        codepage_rs::Char437(97)
     };
     ('b') => {
-        codepage_rs::Char437::from_byte(98)
+        codepage_rs::Char437(98)
     };
     ('c') => {
-        codepage_rs::Char437::from_byte(99)
+        codepage_rs::Char437(99)
     };
     ('d') => {
-        codepage_rs::Char437::from_byte(100)
+        codepage_rs::Char437(100)
     };
     ('e') => {
-        codepage_rs::Char437::from_byte(101)
+        codepage_rs::Char437(101)
     };
     ('f') => {
-        codepage_rs::Char437::from_byte(102)
+        codepage_rs::Char437(102)
     };
     ('g') => {
-        codepage_rs::Char437::from_byte(103)
+        codepage_rs::Char437(103)
     };
     ('h') => {
-        codepage_rs::Char437::from_byte(104)
+        codepage_rs::Char437(104)
     };
     ('i') => {
-        codepage_rs::Char437::from_byte(105)
+        codepage_rs::Char437(105)
     };
     ('j') => {
-        codepage_rs::Char437::from_byte(106)
+        codepage_rs::Char437(106)
     };
     ('k') => {
-        codepage_rs::Char437::from_byte(107)
+        codepage_rs::Char437(107)
     };
     ('l') => {
-        codepage_rs::Char437::from_byte(108)
+        codepage_rs::Char437(108)
     };
     ('m') => {
-        codepage_rs::Char437::from_byte(109)
+        codepage_rs::Char437(109)
     };
     ('n') => {
-        codepage_rs::Char437::from_byte(110)
+        codepage_rs::Char437(110)
     };
     ('o') => {
-        codepage_rs::Char437::from_byte(111)
+        codepage_rs::Char437(111)
     };
     ('p') => {
-        codepage_rs::Char437::from_byte(112)
+        codepage_rs::Char437(112)
     };
     ('q') => {
-        codepage_rs::Char437::from_byte(113)
+        codepage_rs::Char437(113)
     };
     ('r') => {
-        codepage_rs::Char437::from_byte(114)
+        codepage_rs::Char437(114)
     };
     ('s') => {
-        codepage_rs::Char437::from_byte(115)
+        codepage_rs::Char437(115)
     };
     ('t') => {
-        codepage_rs::Char437::from_byte(116)
+        codepage_rs::Char437(116)
     };
     ('u') => {
-        codepage_rs::Char437::from_byte(117)
+        codepage_rs::Char437(117)
     };
     ('v') => {
-        codepage_rs::Char437::from_byte(118)
+        codepage_rs::Char437(118)
     };
     ('w') => {
-        codepage_rs::Char437::from_byte(119)
+        codepage_rs::Char437(119)
     };
     ('x') => {
-        codepage_rs::Char437::from_byte(120)
+        codepage_rs::Char437(120)
     };
     ('y') => {
-        codepage_rs::Char437::from_byte(121)
+        codepage_rs::Char437(121)
     };
     ('z') => {
-        codepage_rs::Char437::from_byte(122)
+        codepage_rs::Char437(122)
     };
     ('{') => {
-        codepage_rs::Char437::from_byte(123)
+        codepage_rs::Char437(123)
     };
     ('|') => {
-        codepage_rs::Char437::from_byte(124)
+        codepage_rs::Char437(124)
     };
     ('}') => {
-        codepage_rs::Char437::from_byte(125)
+        codepage_rs::Char437(125)
     };
     ('~') => {
-        codepage_rs::Char437::from_byte(126)
+        codepage_rs::Char437(126)
     };
     ('⌂') => {
-        codepage_rs::Char437::from_byte(127)
+        codepage_rs::Char437(127)
     };
     ('Ç') => {
-        codepage_rs::Char437::from_byte(128)
+        codepage_rs::Char437(128)
     };
     ('ü') => {
-        codepage_rs::Char437::from_byte(129)
+        codepage_rs::Char437(129)
     };
     ('é') => {
-        codepage_rs::Char437::from_byte(130)
+        codepage_rs::Char437(130)
     };
     ('â') => {
-        codepage_rs::Char437::from_byte(131)
+        codepage_rs::Char437(131)
     };
     ('ä') => {
-        codepage_rs::Char437::from_byte(132)
+        codepage_rs::Char437(132)
     };
     ('à') => {
-        codepage_rs::Char437::from_byte(133)
+        codepage_rs::Char437(133)
     };
     ('å') => {
-        codepage_rs::Char437::from_byte(134)
+        codepage_rs::Char437(134)
     };
     ('ç') => {
-        codepage_rs::Char437::from_byte(135)
+        codepage_rs::Char437(135)
     };
     ('ê') => {
-        codepage_rs::Char437::from_byte(136)
+        codepage_rs::Char437(136)
     };
     ('ë') => {
-        codepage_rs::Char437::from_byte(137)
+        codepage_rs::Char437(137)
     };
     ('è') => {
-        codepage_rs::Char437::from_byte(138)
+        codepage_rs::Char437(138)
     };
     ('ï') => {
-        codepage_rs::Char437::from_byte(139)
+        codepage_rs::Char437(139)
     };
     ('î') => {
-        codepage_rs::Char437::from_byte(140)
+        codepage_rs::Char437(140)
     };
     ('ì') => {
-        codepage_rs::Char437::from_byte(141)
+        codepage_rs::Char437(141)
     };
     ('Ä') => {
-        codepage_rs::Char437::from_byte(142)
+        codepage_rs::Char437(142)
     };
     ('Å') => {
-        codepage_rs::Char437::from_byte(143)
+        codepage_rs::Char437(143)
     };
     ('É') => {
-        codepage_rs::Char437::from_byte(144)
+        codepage_rs::Char437(144)
     };
     ('æ') => {
-        codepage_rs::Char437::from_byte(145)
+        codepage_rs::Char437(145)
     };
     ('Æ') => {
-        codepage_rs::Char437::from_byte(146)
+        codepage_rs::Char437(146)
     };
     ('ô') => {
-        codepage_rs::Char437::from_byte(147)
+        codepage_rs::Char437(147)
     };
     ('ö') => {
-        codepage_rs::Char437::from_byte(148)
+        codepage_rs::Char437(148)
     };
     ('ò') => {
-        codepage_rs::Char437::from_byte(149)
+        codepage_rs::Char437(149)
     };
     ('û') => {
-        codepage_rs::Char437::from_byte(150)
+        codepage_rs::Char437(150)
     };
     ('ù') => {
-        codepage_rs::Char437::from_byte(151)
+        codepage_rs::Char437(151)
     };
     ('ÿ') => {
-        codepage_rs::Char437::from_byte(152)
+        codepage_rs::Char437(152)
     };
     ('Ö') => {
-        codepage_rs::Char437::from_byte(153)
+        codepage_rs::Char437(153)
     };
     ('Ü') => {
-        codepage_rs::Char437::from_byte(154)
+        codepage_rs::Char437(154)
     };
     ('¢') => {
-        codepage_rs::Char437::from_byte(155)
+        codepage_rs::Char437(155)
     };
     ('£') => {
-        codepage_rs::Char437::from_byte(156)
+        codepage_rs::Char437(156)
     };
     ('¥') => {
-        codepage_rs::Char437::from_byte(157)
+        codepage_rs::Char437(157)
     };
     ('₧') => {
-        codepage_rs::Char437::from_byte(158)
+        codepage_rs::Char437(158)
     };
     ('ƒ') => {
-        codepage_rs::Char437::from_byte(159)
+        codepage_rs::Char437(159)
     };
     ('á') => {
-        codepage_rs::Char437::from_byte(160)
+        codepage_rs::Char437(160)
     };
     ('í') => {
-        codepage_rs::Char437::from_byte(161)
+        codepage_rs::Char437(161)
     };
     ('ó') => {
-        codepage_rs::Char437::from_byte(162)
+        codepage_rs::Char437(162)
     };
     ('ú') => {
-        codepage_rs::Char437::from_byte(163)
+        codepage_rs::Char437(163)
     };
     ('ñ') => {
-        codepage_rs::Char437::from_byte(164)
+        codepage_rs::Char437(164)
     };
     ('Ñ') => {
-        codepage_rs::Char437::from_byte(165)
+        codepage_rs::Char437(165)
     };
     ('ª') => {
-        codepage_rs::Char437::from_byte(166)
+        codepage_rs::Char437(166)
     };
     ('º') => {
-        codepage_rs::Char437::from_byte(167)
+        codepage_rs::Char437(167)
     };
     ('¿') => {
-        codepage_rs::Char437::from_byte(168)
+        codepage_rs::Char437(168)
     };
     ('⌐') => {
-        codepage_rs::Char437::from_byte(169)
+        codepage_rs::Char437(169)
     };
     ('¬') => {
-        codepage_rs::Char437::from_byte(170)
+        codepage_rs::Char437(170)
     };
     ('½') => {
-        codepage_rs::Char437::from_byte(171)
+        codepage_rs::Char437(171)
     };
     ('¼') => {
-        codepage_rs::Char437::from_byte(172)
+        codepage_rs::Char437(172)
     };
     ('¡') => {
-        codepage_rs::Char437::from_byte(173)
+        codepage_rs::Char437(173)
     };
     ('«') => {
-        codepage_rs::Char437::from_byte(174)
+        codepage_rs::Char437(174)
     };
     ('»') => {
-        codepage_rs::Char437::from_byte(175)
+        codepage_rs::Char437(175)
     };
     ('░') => {
-        codepage_rs::Char437::from_byte(176)
+        codepage_rs::Char437(176)
     };
     ('▒') => {
-        codepage_rs::Char437::from_byte(177)
+        codepage_rs::Char437(177)
     };
     ('▓') => {
-        codepage_rs::Char437::from_byte(178)
+        codepage_rs::Char437(178)
     };
     ('│') => {
-        codepage_rs::Char437::from_byte(179)
+        codepage_rs::Char437(179)
     };
     ('┤') => {
-        codepage_rs::Char437::from_byte(180)
+        codepage_rs::Char437(180)
     };
     ('╡') => {
-        codepage_rs::Char437::from_byte(181)
+        codepage_rs::Char437(181)
     };
     ('╢') => {
-        codepage_rs::Char437::from_byte(182)
+        codepage_rs::Char437(182)
     };
     ('╖') => {
-        codepage_rs::Char437::from_byte(183)
+        codepage_rs::Char437(183)
     };
     ('╕') => {
-        codepage_rs::Char437::from_byte(184)
+        codepage_rs::Char437(184)
     };
     ('╣') => {
-        codepage_rs::Char437::from_byte(185)
+        codepage_rs::Char437(185)
     };
     ('║') => {
-        codepage_rs::Char437::from_byte(186)
+        codepage_rs::Char437(186)
     };
     ('╗') => {
-        codepage_rs::Char437::from_byte(187)
+        codepage_rs::Char437(187)
     };
     ('╝') => {
-        codepage_rs::Char437::from_byte(188)
+        codepage_rs::Char437(188)
     };
     ('╜') => {
-        codepage_rs::Char437::from_byte(189)
+        codepage_rs::Char437(189)
     };
     ('╛') => {
-        codepage_rs::Char437::from_byte(190)
+        codepage_rs::Char437(190)
     };
     ('┐') => {
-        codepage_rs::Char437::from_byte(191)
+        codepage_rs::Char437(191)
     };
     ('└') => {
-        codepage_rs::Char437::from_byte(192)
+        codepage_rs::Char437(192)
     };
     ('┴') => {
-        codepage_rs::Char437::from_byte(193)
+        codepage_rs::Char437(193)
     };
     ('┬') => {
-        codepage_rs::Char437::from_byte(194)
+        codepage_rs::Char437(194)
     };
     ('├') => {
-        codepage_rs::Char437::from_byte(195)
+        codepage_rs::Char437(195)
     };
     ('─') => {
-        codepage_rs::Char437::from_byte(196)
+        codepage_rs::Char437(196)
     };
     ('┼') => {
-        codepage_rs::Char437::from_byte(197)
+        codepage_rs::Char437(197)
     };
     ('╞') => {
-        codepage_rs::Char437::from_byte(198)
+        codepage_rs::Char437(198)
     };
     ('╟') => {
-        codepage_rs::Char437::from_byte(199)
+        codepage_rs::Char437(199)
     };
     ('╚') => {
-        codepage_rs::Char437::from_byte(200)
+        codepage_rs::Char437(200)
     };
     ('╔') => {
-        codepage_rs::Char437::from_byte(201)
+        codepage_rs::Char437(201)
     };
     ('╩') => {
-        codepage_rs::Char437::from_byte(202)
+        codepage_rs::Char437(202)
     };
     ('╦') => {
-        codepage_rs::Char437::from_byte(203)
+        codepage_rs::Char437(203)
     };
     ('╠') => {
-        codepage_rs::Char437::from_byte(204)
+        codepage_rs::Char437(204)
     };
     ('═') => {
-        codepage_rs::Char437::from_byte(205)
+        codepage_rs::Char437(205)
     };
     ('╬') => {
-        codepage_rs::Char437::from_byte(206)
+        codepage_rs::Char437(206)
     };
     ('╧') => {
-        codepage_rs::Char437::from_byte(207)
+        codepage_rs::Char437(207)
     };
     ('╨') => {
-        codepage_rs::Char437::from_byte(208)
+        codepage_rs::Char437(208)
     };
     ('╤') => {
-        codepage_rs::Char437::from_byte(209)
+        codepage_rs::Char437(209)
     };
     ('╥') => {
-        codepage_rs::Char437::from_byte(210)
+        codepage_rs::Char437(210)
     };
     ('╙') => {
-        codepage_rs::Char437::from_byte(211)
+        codepage_rs::Char437(211)
     };
     ('╘') => {
-        codepage_rs::Char437::from_byte(212)
+        codepage_rs::Char437(212)
     };
     ('╒') => {
-        codepage_rs::Char437::from_byte(213)
+        codepage_rs::Char437(213)
     };
     ('╓') => {
-        codepage_rs::Char437::from_byte(214)
+        codepage_rs::Char437(214)
     };
     ('╫') => {
-        codepage_rs::Char437::from_byte(215)
+        codepage_rs::Char437(215)
     };
     ('╪') => {
-        codepage_rs::Char437::from_byte(216)
+        codepage_rs::Char437(216)
     };
     ('┘') => {
-        codepage_rs::Char437::from_byte(217)
+        codepage_rs::Char437(217)
     };
     ('┌') => {
-        codepage_rs::Char437::from_byte(218)
+        codepage_rs::Char437(218)
     };
     ('█') => {
-        codepage_rs::Char437::from_byte(219)
+        codepage_rs::Char437(219)
     };
     ('▄') => {
-        codepage_rs::Char437::from_byte(220)
+        codepage_rs::Char437(220)
     };
     ('▌') => {
-        codepage_rs::Char437::from_byte(221)
+        codepage_rs::Char437(221)
     };
     ('▐') => {
-        codepage_rs::Char437::from_byte(222)
+        codepage_rs::Char437(222)
     };
     ('▀') => {
-        codepage_rs::Char437::from_byte(223)
+        codepage_rs::Char437(223)
     };
     ('α') => {
-        codepage_rs::Char437::from_byte(224)
+        codepage_rs::Char437(224)
     };
     ('ß') => {
-        codepage_rs::Char437::from_byte(225)
+        codepage_rs::Char437(225)
     };
     ('Γ') => {
-        codepage_rs::Char437::from_byte(226)
+        codepage_rs::Char437(226)
     };
     ('π') => {
-        codepage_rs::Char437::from_byte(227)
+        codepage_rs::Char437(227)
     };
     ('Σ') => {
-        codepage_rs::Char437::from_byte(228)
+        codepage_rs::Char437(228)
     };
     ('σ') => {
-        codepage_rs::Char437::from_byte(229)
+        codepage_rs::Char437(229)
     };
     ('µ') => {
-        codepage_rs::Char437::from_byte(230)
+        codepage_rs::Char437(230)
     };
     ('τ') => {
-        codepage_rs::Char437::from_byte(231)
+        codepage_rs::Char437(231)
     };
     ('Φ') => {
-        codepage_rs::Char437::from_byte(232)
+        codepage_rs::Char437(232)
     };
     ('Θ') => {
-        codepage_rs::Char437::from_byte(233)
+        codepage_rs::Char437(233)
     };
     ('Ω') => {
-        codepage_rs::Char437::from_byte(234)
+        codepage_rs::Char437(234)
     };
     ('δ') => {
-        codepage_rs::Char437::from_byte(235)
+        codepage_rs::Char437(235)
     };
     ('∞') => {
-        codepage_rs::Char437::from_byte(236)
+        codepage_rs::Char437(236)
     };
     ('φ') => {
-        codepage_rs::Char437::from_byte(237)
+        codepage_rs::Char437(237)
     };
     ('ε') => {
-        codepage_rs::Char437::from_byte(238)
+        codepage_rs::Char437(238)
     };
     ('∩') => {
-        codepage_rs::Char437::from_byte(239)
+        codepage_rs::Char437(239)
     };
     ('≡') => {
-        codepage_rs::Char437::from_byte(240)
+        codepage_rs::Char437(240)
     };
     ('±') => {
-        codepage_rs::Char437::from_byte(241)
+        codepage_rs::Char437(241)
     };
     ('≥') => {
-        codepage_rs::Char437::from_byte(242)
+        codepage_rs::Char437(242)
     };
     ('≤') => {
-        codepage_rs::Char437::from_byte(243)
+        codepage_rs::Char437(243)
     };
     ('⌠') => {
-        codepage_rs::Char437::from_byte(244)
+        codepage_rs::Char437(244)
     };
     ('⌡') => {
-        codepage_rs::Char437::from_byte(245)
+        codepage_rs::Char437(245)
     };
     ('÷') => {
-        codepage_rs::Char437::from_byte(246)
+        codepage_rs::Char437(246)
     };
     ('≈') => {
-        codepage_rs::Char437::from_byte(247)
+        codepage_rs::Char437(247)
     };
     ('°') => {
-        codepage_rs::Char437::from_byte(248)
+        codepage_rs::Char437(248)
     };
     ('∙') => {
-        codepage_rs::Char437::from_byte(249)
+        codepage_rs::Char437(249)
     };
     ('·') => {
-        codepage_rs::Char437::from_byte(250)
+        codepage_rs::Char437(250)
     };
     ('√') => {
-        codepage_rs::Char437::from_byte(251)
+        codepage_rs::Char437(251)
     };
     ('ⁿ') => {
-        codepage_rs::Char437::from_byte(252)
+        codepage_rs::Char437(252)
     };
     ('²') => {
-        codepage_rs::Char437::from_byte(253)
+        codepage_rs::Char437(253)
     };
     ('■') => {
-        codepage_rs::Char437::from_byte(254)
+        codepage_rs::Char437(254)
     };
     ('\u{a0}') => {
-        codepage_rs::Char437::from_byte(255)
+        codepage_rs::Char437(255)
     };
 }
