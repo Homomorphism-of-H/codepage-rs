@@ -1,11 +1,12 @@
 [package]
 name = "codepage-rs"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2024"
 license = "MIT"
 categories = ["encoding"]
 keywords = ["codepage-437", "codepage", "encoding"]
 readme = "README.md"
+authors = ["Fae"]
 description = "A tiny crate for codepage-437 encoding."
 repository = "https://github.com/fhupp/codepage-rs/"
 
